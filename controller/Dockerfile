@@ -1,0 +1,10 @@
+FROM golang:1.21.5 AS build-stage
+WORKDIR /app
+COPY *.go .
+COPY go.mod .
+COPY go.sum .
+RUN CGO_ENABLED=0 GOOS=linux go build -o controller
+
+FROM alpine
+COPY --from=build-stage /app/controller /entrypoint
+CMD ["/entrypoint"]

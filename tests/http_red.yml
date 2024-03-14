@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx
+  labels:
+    app: nginx
+    to_proxy: "true"
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+      to_proxy: "true"
+  template:
+    metadata:
+      labels:
+        app: nginx
+        to_proxy: "true"
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "100Mi"
+          limits:
+            cpu: "50m"
+            memory: "100Mi"
+        resizePolicy:
+        - resourceName: cpu
+          restartPolicy: NotRequired
+        - resourceName: memory
+          restartPolicy: RestartContainer
+      - name: http-red
+        image: http_red:v0.0.1
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8080
+        env:
+        - name: LISTEN_PORT
+          value: "8080"
+        - name: FORWARDING_TO_PORT
+          value: "80"
+      serviceAccountName: proxy-controller

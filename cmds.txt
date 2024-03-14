@@ -1,0 +1,9 @@
+# To create a kind cluster
+kind create cluster --name=go-tests
+
+# To upload a docker image to the kind cluster
+kind load docker-image <image-name> --name=go-tests
+# (yes, it takes a while)
+
+# To delete a kind cluster
+kind delete cluster --name=go-tests
