@@ -64,8 +64,17 @@ func setCpuResource(
   retryErr := retry.RetryOnConflict(retryPolicy, func() error {
     pod := getMyPod(clientset)
 
-    (*pod).Spec.Containers[0].Resources.Limits["cpu"] = limit
-    (*pod).Spec.Containers[0].Resources.Requests["cpu"] = request
+    if (*pod).Spec.Containers[0].Resources.Limits == nil {
+      (*pod).Spec.Containers[0].Resources.Limits = apiv1.ResourceList{"cpu": limit}
+    } else{
+      (*pod).Spec.Containers[0].Resources.Limits["cpu"] = limit
+    }
+
+    if (*pod).Spec.Containers[0].Resources.Requests == nil {
+      (*pod).Spec.Containers[0].Resources.Requests = apiv1.ResourceList{"cpu": request}
+    } else{
+      (*pod).Spec.Containers[0].Resources.Requests["cpu"] = request
+    }
     _, err := clientset.CoreV1().Pods(apiv1.NamespaceDefault).Update(context.TODO(), pod, metav1.UpdateOptions{})
     return err
   })
