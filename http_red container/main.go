@@ -17,7 +17,7 @@ var forwardingToPort string
 func main() {
   log.SetOutput(os.Stdout)
 
-  readEnv()
+  listenPort, forwardingToPort = readEnv()
 
   remote, err := url.Parse("http://localhost:" + forwardingToPort)
   if err != nil {
@@ -40,8 +40,8 @@ func main() {
   turnOffContainer(clientset)  // The container needs to be turned off at the beginning
   proxy := httputil.NewSingleHostReverseProxy(remote)
   http.HandleFunc("/", proxyReqHandler(proxy))
-  
-  log.Println("Listening on port", listenPort)
+
+  log.Println("Listening on port: " + listenPort)
 
   err = http.ListenAndServe(listenPort, nil)
   if err != nil {
@@ -62,7 +62,7 @@ func getClientset() *kubernetes.Clientset {
 }
 
 // This function sets the listenPort and the forwardingToPort
-func readEnv() {
+func readEnv() (string, string) {
   listenPort := os.Getenv("LISTEN_PORT")
   if listenPort == "" {
     log.Println("LISTEN_PORT not set, using default 8080")
@@ -76,4 +76,5 @@ func readEnv() {
     log.Println("FORWARDING_TO_PORT not set, using default 80")
     forwardingToPort = "80"
   }
+  return listenPort, forwardingToPort
 }
