@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: exampleworkload
+  labels:
+    app: exampleworkload
+    to_proxy: "true"
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: exampleworkload
+      to_proxy: "true"
+  template:
+    metadata:
+      labels:
+        app: exampleworkload
+        to_proxy: "true"
+    spec:
+      containers:
+      - name: workload
+        image: example_workload:v0.0.1
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "250m"
+            memory: "256Mi"
+        resizePolicy:
+        - resourceName: cpu
+          restartPolicy: NotRequired
+        - resourceName: memory
+          restartPolicy: RestartContainer
+      serviceAccountName: proxy-controller
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: exampleworkload
+spec:
+  type: ClusterIP
+  selector:
+    app: exampleworkload
+  ports:
+  - port: 8080
+    targetPort: 8080
