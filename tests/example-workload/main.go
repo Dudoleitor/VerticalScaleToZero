@@ -8,15 +8,15 @@ import (
 )
 
 var testLength = 2
-var numToTest = 100000000
+var numToTest = 100000
 
 func runTest(n int) string {
   var l int
 
   start := time.Now()
-  for i:=0; i < 100*n; i++{
-    for j:=0; j < 100; j++{
-      for k:=0; k < 100; k++{
+  for i:=0; i < 10*n; i++{
+    for j:=0; j < 50; j++{
+      for k:=0; k < 50; k++{
         l = numToTest / (i*j*k+1)
       }
     }
