@@ -1,0 +1,24 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: resource-monitor
+  labels:
+    app: resource-monitor
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: resource-monitor
+  template:
+    metadata:
+      labels:
+        app: resource-monitor
+    spec:
+      containers:
+      - name: monitor
+        image: resources_monitor:v0.0.1
+        env:
+        - name: POD_TO_MONITOR
+          value: "exampleworkload-6d7c78d776-xm6xf"
+      serviceAccountName: proxy-controller
