@@ -21,8 +21,27 @@ var selector = metav1.ListOptions{
 
 func main() {
   log.SetOutput(os.Stdout)
-	var kubeconfig *string
 
+  clientset := getClientset()
+
+  // Starting the watcher
+  log.Println("Starting watcher...")
+  watchDeployments(clientset, &selector)
+}
+
+// Helper functions
+func int32Ptr(i int32) *int32 { return &i }
+func int64Ptr(i int64) *int64 { return &i }
+func deploymentToString(deployments []appsv1.Deployment) []string {
+  var deploymentNames []string
+  for _, deployment := range deployments {
+    deploymentNames = append(deploymentNames, deployment.Name)
+  }
+  return deploymentNames
+}
+func getClientset() *kubernetes.Clientset {
+  var kubeconfig *string
+  // Building homedir, needed for the kubeconfig file
   if home := homedir.HomeDir(); home != "" {
 		kubeconfig = flag.String("kubeconfig", filepath.Join(home, ".kube", "config"), "(optional) absolute path to the kubeconfig file")
 	} else {
@@ -46,19 +65,5 @@ func main() {
 	clientset, err := kubernetes.NewForConfig(config)
 	if err != nil {
 		panic(err) }
-
-  // Starting the watcher
-  log.Println("Starting watcher...")
-  watchDeployments(clientset, &selector)
-}
-
-// Helper functions
-func int32Ptr(i int32) *int32 { return &i }
-func int64Ptr(i int64) *int64 { return &i }
-func deploymentToString(deployments []appsv1.Deployment) []string {
-  var deploymentNames []string
-  for _, deployment := range deployments {
-    deploymentNames = append(deploymentNames, deployment.Name)
-  }
-  return deploymentNames
+  return clientset
 }

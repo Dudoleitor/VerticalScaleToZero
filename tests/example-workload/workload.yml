@@ -6,7 +6,7 @@ metadata:
     app: exampleworkload
     to_proxy: "true"
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: exampleworkload

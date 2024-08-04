@@ -6,6 +6,7 @@ import (
 	"net/http/httputil"
 	"net/url"
 	"os"
+  "strconv"
 
   "k8s.io/client-go/kubernetes"
   "k8s.io/client-go/rest"
@@ -13,18 +14,19 @@ import (
 
 var listenPort string
 var forwardingToPort string
+var stopDelaySec int
 
 func main() {
   log.SetOutput(os.Stdout)
 
-  listenPort, forwardingToPort = readEnv()
+  listenPort, forwardingToPort, stopDelaySec = readEnv()
 
   remote, err := url.Parse("http://localhost:" + forwardingToPort)
   if err != nil {
     panic(err) }
   
   clientset := getClientset()
-  resHandler := newResourceHandler(clientset)
+  resHandler := newResourceHandler(clientset, stopDelaySec)
 
   proxyReqHandler := func(p *httputil.ReverseProxy) func(http.ResponseWriter, *http.Request) {
     return func(w http.ResponseWriter, r *http.Request) {
@@ -61,8 +63,8 @@ func getClientset() *kubernetes.Clientset {
   return clientset
 }
 
-// This function sets the listenPort and the forwardingToPort
-func readEnv() (string, string) {
+// This function gets the listenPort, the forwardingToPort and the stopDelaySec variables
+func readEnv() (string, string, int) {
   listenPort := os.Getenv("LISTEN_PORT")
   if listenPort == "" {
     log.Println("LISTEN_PORT not set, using default 8080")
@@ -76,5 +78,11 @@ func readEnv() (string, string) {
     log.Println("FORWARDING_TO_PORT not set, using default 80")
     forwardingToPort = "80"
   }
-  return listenPort, forwardingToPort
+
+  stopDelaySec, err := strconv.Atoi(os.Getenv("STOP_DELAY_SEC"))
+  if (err != nil) {
+    log.Println("STOP_DELAY_SEC not set, using default 0")
+    stopDelaySec = 0
+  }
+  return listenPort, forwardingToPort, stopDelaySec
 }

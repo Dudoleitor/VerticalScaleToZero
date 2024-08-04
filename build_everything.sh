@@ -10,6 +10,9 @@ docker build . -t http_red:v0.0.1 &
 cd ../controller
 docker build . -t controller:v0.0.1 &
 
+cd ../resources_monitor
+docker build . -t resources_monitor:v0.0.1 &
+
 cd ../tests/example-workload
 docker build . -t example_workload:v0.0.1 &
 
@@ -24,7 +27,7 @@ done
 cd ../..
 
 echo "Loading images into kind cluster..."
-for img in http_red:v0.0.1 controller:v0.0.1 example_workload:v0.0.1 load_generator:v0.0.1
+for img in http_red:v0.0.1 controller:v0.0.1 example_workload:v0.0.1 load_generator:v0.0.1 resources_monitor:v0.0.1
 do
     kind load docker-image $img &
 done
@@ -36,3 +39,6 @@ done
 
 echo "Appling controller manifest..."
 kubectl apply -f controller/controller.yml
+
+echo "Installing metrics server"
+kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml

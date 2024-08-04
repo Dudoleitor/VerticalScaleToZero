@@ -6,7 +6,7 @@ import (
   "sync"
 )
 
-var target = "http://localhost:8080/"
+var target = "http://localhost:8080/?n=20"
 var waitGroup sync.WaitGroup
 var subroutinesSemaphore sync.WaitGroup
 
@@ -19,7 +19,7 @@ func main() {
   subroutinesSemaphore.Add(1)
 
   fmt.Println("Spawning subroutines")
-  for i := 0; i < 5000; i++ {
+  for i := 0; i < 500; i++ {
     waitGroup.Add(1)
     go subroutineWork()
   }

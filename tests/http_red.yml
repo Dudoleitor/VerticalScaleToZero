@@ -20,13 +20,15 @@ spec:
       containers:
       - name: nginx
         image: nginx:latest
-        resources:
-          requests:
-            cpu: "50m"
-            memory: "100Mi"
-          limits:
-            cpu: "50m"
-            memory: "100Mi"
+        ports:
+        - containerPort: 80
+        # resources:
+        #   requests:
+        #     cpu: "69m"
+        #     memory: "100Mi"
+        #   limits:
+        #     cpu: "169m"
+        #     memory: "100Mi"
         resizePolicy:
         - resourceName: cpu
           restartPolicy: NotRequired
@@ -37,9 +39,9 @@ spec:
         imagePullPolicy: Never
         ports:
         - containerPort: 8080
-        env:
-        - name: LISTEN_PORT
-          value: "8080"
-        - name: FORWARDING_TO_PORT
-          value: "80"
+        # env:
+        # - name: LISTEN_PORT
+        #   value: "8080"
+        # - name: FORWARDING_TO_PORT
+        #   value: "80"
       serviceAccountName: proxy-controller
