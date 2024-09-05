@@ -35,7 +35,7 @@ func watchDeployments(
 
     switch event.Type {
     case "ADDED", "MODIFIED":
-      handlePodInjection(deploymentsClient, *item, 8080, 80)
+      handlePodInjection(deploymentsClient, *item, 8080, 80, 1)
     }
   }
   return nil
@@ -46,6 +46,7 @@ func handlePodInjection(
   deployment appsv1.Deployment,
   containerPort int32,
   portToForward int32,
+  stopDelaySec int32,
 ) error {
   // Defining the proxy container that will be injected
   proxyContainer := apiv1.Container{
@@ -67,6 +68,10 @@ func handlePodInjection(
         Name:  "FORWARDING_TO_PORT",
         Value: fmt.Sprintf("%d", portToForward),
       },
+      {
+        Name:  "STOP_DELAY_SEC",
+        Value: fmt.Sprintf("%d", stopDelaySec),
+      },
     },
   }
 
@@ -81,7 +86,8 @@ func handlePodInjection(
       if checkIfProxyContainerIsAsDesired(
         *existingContainer,
         containerPort,
-        portToForward) {
+        portToForward,
+        stopDelaySec) {
         log.Printf("Proxy container is as desired in %s, skipping\n", deployment.Name)
         return nil
       }
@@ -133,6 +139,7 @@ func checkIfProxyContainerIsAsDesired(
   container apiv1.Container,
   containerPort int32,
   portToForward int32,
+  stopDelaySec int32,
 ) bool {
   if container.Name != containerName {
     return false }
@@ -154,7 +161,9 @@ func checkIfProxyContainerIsAsDesired(
   if container.Env[0].Name != "LISTEN_PORT" &&
     container.Env[0].Value != fmt.Sprintf("%d", containerPort) &&
     container.Env[1].Name != "FORWARDING_TO_PORT" &&
-    container.Env[1].Value != fmt.Sprintf("%d", portToForward) {
+    container.Env[1].Value != fmt.Sprintf("%d", portToForward) &&
+    container.Env[2].Name != "STOP_DELAY_SEC" &&
+    container.Env[2].Value != fmt.Sprintf("%d", stopDelaySec) {
     return false }
 
   return true
