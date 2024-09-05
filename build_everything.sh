@@ -40,5 +40,5 @@ done
 echo "Appling controller manifest..."
 kubectl apply -f controller/controller.yml
 
-echo "Installing metrics server"
-kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+#echo "Installing metrics server"
+#kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
