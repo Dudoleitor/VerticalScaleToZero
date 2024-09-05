@@ -8,7 +8,7 @@ import (
 )
 
 var testLength = 2
-var numToTest = 100000
+var numToTest = 10000
 
 func runTest(n int) string {
   var l int
