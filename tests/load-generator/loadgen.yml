@@ -17,5 +17,7 @@ spec:
       containers:
       - name: workload
         image: load_generator:v0.0.1
-        ports:
-        - containerPort: 80
+        env:
+        - name: POD_TO_MONITOR
+          value: "exampleworkload-66748bc8b8-4fj4q"
+      serviceAccountName: proxy-controller
