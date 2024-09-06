@@ -2,6 +2,17 @@ package main
 
 import "slices"
 
+type RollingMean struct {
+  sum int64
+  count int64
+}
+
+type RollingVariance struct {
+  sum int64
+  sumOfSquares int64
+  count int64
+}
+
 // This function computes the mean of a slice of float64s.
 func mean(data []float64) float64 {
   sum := 0.0
@@ -65,4 +76,23 @@ func percentile(data []float64) float64 {
   // Finding the 95th percentile
   index := int(0.95 * float64(len(sorted)))
   return sorted[index]
+}
+
+func getRollingMean (d RollingMean) float64 {
+  return float64(d.sum) / float64(d.count)
+}
+func updateRollingMean (d RollingMean, newValue int64) RollingMean {
+  d.sum += newValue
+  d.count++
+  return d
+}
+
+func getRollingVariance (d RollingVariance) float64 {
+  return (float64(d.sumOfSquares) - ((float64(d.sum)*float64(d.sum))/float64(d.count))) / (float64(d.count) - 1)
+}
+func updateRollingVariance (d RollingVariance, newValue int64) RollingVariance {
+  d.sum += newValue
+  d.sumOfSquares += newValue * newValue
+  d.count++
+  return d
 }
