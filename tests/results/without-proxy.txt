@@ -1,0 +1,74 @@
+Without proxy, constant - mean 100 ms
+
+Testing different values of n for  100  requests
+Starting 1
+Starting 305
+Starting 510
+Starting 800
+Starting 1525
+Starting 3005
+Results for n =  1
+Response time:
+  Mean:  0.0018118845799999994
+  Variance:  1.030130418003978e-05
+  Median:  0.0014132785
+  Mode:  0.001294491
+  95th percentile:  0.002071719
+CPU request:
+  Mean:  100
+  Variance:  0
+
+Results for n =  305
+Response time:
+  Mean:  0.05880480464999996
+  Variance:  0.0008767385519322635
+  Median:  0.0492535655
+  Mode:  0.069069989
+  95th percentile:  0.099252756
+CPU request:
+  Mean:  100
+  Variance:  0
+
+Results for n =  510
+Response time:
+  Mean:  0.10068526476000002
+  Variance:  8.647543955052106e-05
+  Median:  0.0975125215
+  Mode:  0.097290774
+  95th percentile:  0.108033325
+CPU request:
+  Mean:  100
+  Variance:  0
+
+Results for n =  800
+Response time:
+  Mean:  0.1994437288
+  Variance:  2.555017238392129e-05
+  Median:  0.2033958525
+  Mode:  0.203684852
+  95th percentile:  0.204602702
+CPU request:
+  Mean:  100
+  Variance:  0
+
+Results for n =  1525
+Response time:
+  Mean:  0.49943490947999997
+  Variance:  4.8320945483223485e-06
+  Median:  0.499389365
+  Mode:  0.498534587
+  95th percentile:  0.501648561
+CPU request:
+  Mean:  100
+  Variance:  0
+
+Results for n =  3005
+Response time:
+  Mean:  1.0035305856999996
+  Variance:  0.00027866961858314645
+  Median:  1.0027581859999999
+  Mode:  1.005532362
+  95th percentile:  1.015609708
+CPU request:
+  Mean:  100
+  Variance:  0

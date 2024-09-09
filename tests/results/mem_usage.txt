@@ -1,0 +1,2 @@
+Proxy controller: 7 MB, 0 mCPU
+Proxy sidecar: 11 MB, 3 mCPU
