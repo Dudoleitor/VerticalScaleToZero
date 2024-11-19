@@ -13,6 +13,9 @@ To use VerticalScaleToZero, the **InPlacePodVerticalScaling** feature gate must 
 It is important to note that VerticalScaleToZero is still in its prototype phase and was developed as part of a research project. The tool demonstrates the concept of workload scaling to zero replicas within Kubernetes, but it is not yet intended for widespread production use. It may lack certain features and robustness that would be expected from a final product.
 
 The tool’s main goal is to contribute insights to the research on cloud resource optimization. Users should consider it a proof-of-concept for experimental or academic purposes.
+For more detailed information about the research and the methodologies used, one can read the full **research report**:
+
+- [Research Report: Vertical Scale to Zero for Kubernetes Pods](https://github.com/Dudoleitor/VerticalScaleToZero/blob/main/VerticalScaleToZero-report.pdf)
 
 ## Requirements
 
